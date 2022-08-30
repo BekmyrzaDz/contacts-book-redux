@@ -18,7 +18,9 @@ const ContactListTop = () => {
       <TextField
         label="type to search..."
         type="search"
-        sx={{ width: 551 }}
+        sx={{
+          width: 551,
+        }}
         id="search"
       />
       <Box>

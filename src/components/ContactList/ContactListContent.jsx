@@ -28,15 +28,16 @@ const StyledButton = styled(Button)(() => ({
   },
 }));
 
-const ContactListContent = () => {
+const ContactListContent = (props) => {
   return (
-    <Card sx={{ maxWidth: 250 }}>
+    <Card sx={{ width: 250 }}>
       <CardActionArea>
         <CardMedia
           component="img"
+          weight="100%"
           height="136"
-          image={ContactImg}
-          alt="green iguana"
+          image={props.image}
+          alt="img"
         />
         <CardContent>
           <Box
@@ -56,7 +57,7 @@ const ContactListContent = () => {
                 fontSize: 18,
               }}
             >
-              Vanessa Fahrmann
+              {props.firstName} {props.lastName}
             </Typography>
             <IconButton>
               <img src={favorite} alt="favorite"></img>
@@ -84,7 +85,7 @@ const ContactListContent = () => {
               component="li"
             >
               <img style={{ marginRight: "5px" }} src={location} alt="" />
-              Bishkek city, Kyrgyzstan
+              {props.city} city, {props.country}
             </Typography>
             <Typography
               sx={{
@@ -96,7 +97,7 @@ const ContactListContent = () => {
               component="li"
             >
               <img style={{ marginRight: "5px" }} src={smartphone} alt="" />
-              +996 550 002 232
+              {props.phoneNumber}
             </Typography>
             <Typography
               sx={{
@@ -108,7 +109,7 @@ const ContactListContent = () => {
               component="li"
             >
               <img style={{ marginRight: "5px" }} src={internet} alt="" />
-              mysite.com
+              {props.website}
             </Typography>
             <Typography
               sx={{
@@ -120,7 +121,7 @@ const ContactListContent = () => {
               component="li"
             >
               <img style={{ marginRight: "5px" }} src={email} alt="" />
-              web@mysite.com
+              {props.email}
             </Typography>
           </Typography>
         </CardContent>
