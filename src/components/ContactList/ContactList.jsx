@@ -1,27 +1,53 @@
 import ContactListTop from "./ContactListTop";
-import { Container, Grid } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@mui/material";
 import ContactListContent from "./ContactListContent";
 
 import { useEffect } from "react";
-import { GetUsersAll } from "../../redux/actions";
+import { GetUsersAll, sortAZ, sortZA } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 
 const ContactList = () => {
-  const dispach = useDispatch();
+  const dispatch = useDispatch();
   const state = useSelector((state) => state.data);
   console.log("state", state);
 
   useEffect(() => {
     const getData = localStorage.getItem("LocalStorageData");
     if (!getData) {
-      dispach(GetUsersAll());
+      dispatch(GetUsersAll());
     }
   }, []);
 
-  return (
+  const filteringAzOnClick = () => {
+    dispatch(sortAZ());
+    console.log("sortAZ");
+  };
+  const filteringZaOnClick = () => {
+    dispatch(sortZA());
+    console.log("sortZA");
+  };
+
+  return state.loading ? (
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <CircularProgress />
+    </Box>
+  ) : state.error ? (
+    <Box>
+      <Typography component="h1">{state.error}</Typography>
+    </Box>
+  ) : (
     <main className="main">
       <Container>
-        <ContactListTop />
+        <ContactListTop
+          filteringAzOnClick={() => filteringAzOnClick()}
+          filteringZaOnClick={() => filteringZaOnClick()}
+        />
         <Grid container spacing={{ xs: 2, sm: 4, md: 6 }}>
           {state.map((contact) => (
             <Grid item>

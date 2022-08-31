@@ -1,7 +1,45 @@
-import { REQUEST_DATA_USERS, GET_SUCCESS_USERS_DATA } from "./types";
+import {
+  REQUEST_DATA_USERS,
+  GET_SUCCESS_USERS_DATA,
+  GET_FAIL_USERS_DATA,
+  SORT_A_Z,
+  SORT_Z_A,
+} from "./types";
 
 const initialState = {
-  data: [0, "adad"],
+  data: [],
+  loading: "false",
+  error: "",
+};
+
+const contactsFilterAZ = (a, b, i) => {
+  const name1 = a[i];
+  const name2 = b[i];
+
+  if (name1 < name2) {
+    return 1;
+  }
+
+  if (name1 > name2) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
+const contactsFilterZA = (a, b, i) => {
+  const name1 = a[i];
+  const name2 = b[i];
+
+  if (name1 < name2) {
+    return -1;
+  }
+
+  if (name1 > name2) {
+    return 1;
+  } else {
+    return 0;
+  }
 };
 
 const reducer = (state = initialState, action) => {
@@ -9,11 +47,35 @@ const reducer = (state = initialState, action) => {
     case REQUEST_DATA_USERS:
       return {
         ...state,
+        loading: true,
       };
     case GET_SUCCESS_USERS_DATA:
       return {
         ...state,
         data: action.payload,
+        loading: false,
+        error: "",
+      };
+    case GET_FAIL_USERS_DATA:
+      return {
+        ...state,
+        data: [],
+        loading: false,
+        error: action.payload,
+      };
+    case SORT_A_Z:
+      return {
+        ...state,
+        data: state.data.sort((a, b) => {
+          return contactsFilterAZ(a, b, "firstName");
+        }),
+      };
+    case SORT_Z_A:
+      return {
+        ...state,
+        data: state.data.sort((a, b) => {
+          return contactsFilterZA(a, b, "firstName");
+        }),
       };
 
     default:

@@ -5,7 +5,7 @@ import favorite from "../../images/favorite-heart.svg";
 import sortAZ from "../../images/sort-AZ.svg";
 import sortZA from "../../images/sort-ZA.svg";
 
-const ContactListTop = () => {
+const ContactListTop = (props) => {
   return (
     <Box
       sx={{
@@ -28,10 +28,10 @@ const ContactListTop = () => {
           {/* <FavoriteIcon color="#D32F2F" /> */}
           <img src={favorite} alt="heart"></img>
         </IconButton>
-        <IconButton>
+        <IconButton onClick={() => props.filteringAzOnClick()}>
           <img src={sortAZ} alt="sortAZ"></img>
         </IconButton>
-        <IconButton>
+        <IconButton onClick={() => props.filteringZaOnClick()}>
           <img src={sortZA} alt="sortZA"></img>
         </IconButton>
       </Box>
