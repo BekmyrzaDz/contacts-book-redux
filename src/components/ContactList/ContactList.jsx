@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import ContactListTop from "./ContactListTop";
 import {
   Box,
@@ -9,13 +10,46 @@ import {
 import ContactListContent from "./ContactListContent";
 
 import { useEffect } from "react";
-import { GetUsersAll, sortAZ, sortZA } from "../../redux/actions";
+import { GetUsersAll } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
+
+const contactsFilterAZ = (a, b, i) => {
+  const nameA = a[i];
+  const nameB = b[i];
+
+  if (nameA < nameB) {
+    return 1;
+  }
+
+  if (nameA > nameB) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
+const contactsFilterZA = (a, b, i) => {
+  const nameA = a[i];
+  const nameB = b[i];
+
+  if (nameA < nameB) {
+    return -1;
+  }
+
+  if (nameA > nameB) {
+    return 1;
+  } else {
+    return 0;
+  }
+};
 
 const ContactList = () => {
   const dispatch = useDispatch();
   const state = useSelector((state) => state.data);
   console.log("state", state);
+
+  const [favorite, setFavorite] = useState(true);
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     const getData = localStorage.getItem("LocalStorageData");
@@ -24,14 +58,40 @@ const ContactList = () => {
     }
   }, []);
 
-  const filteringAzOnClick = () => {
-    dispatch(sortAZ());
-    console.log("sortAZ");
+  const addFavorite = (item) => {
+    setToggle(!toggle);
+    let arr = [];
+
+    if (!toggle) {
+      arr.push(item);
+      localStorage.setItem("Favorite", JSON.stringify(arr));
+    }
   };
-  const filteringZaOnClick = () => {
-    dispatch(sortZA());
-    console.log("sortZA");
+
+  const showFavorites = () => {
+    setFavorite(!favorite);
+    if (favorite) {
+      const favoriteList = localStorage.getItem("Favorite");
+      if (!favoriteList) {
+        alert("There is no Favourite contact");
+      }
+      console.log(favoriteList);
+    }
   };
+
+  const filteringAzOnClick = (data) => {
+    return data.sort((a, b) => {
+      return contactsFilterAZ(a, b, "firstName");
+    });
+  };
+  const filteringZaOnClick = (data) => {
+    return data.sort((a, b) => {
+      return contactsFilterZA(a, b, "firstName");
+    });
+  };
+
+  const favoriteList = JSON.parse(localStorage.getItem("Favorite"));
+  let dataList = favorite ? state : favoriteList;
 
   return state.loading ? (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -44,13 +104,10 @@ const ContactList = () => {
   ) : (
     <main className="main">
       <Container>
-        <ContactListTop
-          filteringAzOnClick={() => filteringAzOnClick()}
-          filteringZaOnClick={() => filteringZaOnClick()}
-        />
+        <ContactListTop showFavorites={() => showFavorites()} />
         <Grid container spacing={{ xs: 2, sm: 4, md: 6 }}>
-          {state.map((contact) => (
-            <Grid item>
+          {dataList.map((contact) => (
+            <Grid item key={contact.id}>
               <ContactListContent
                 key={contact.id}
                 id={contact.id}
@@ -62,6 +119,7 @@ const ContactList = () => {
                 website={contact.website}
                 email={contact.email}
                 image={contact.image}
+                addFavorite={addFavorite}
               />
             </Grid>
           ))}

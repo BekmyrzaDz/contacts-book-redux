@@ -4,6 +4,8 @@ import {
   GET_FAIL_USERS_DATA,
   SORT_A_Z,
   SORT_Z_A,
+  UPDATE_CONTACT,
+  SEARCH_CONTACT,
 } from "./types";
 
 const initialState = {
@@ -13,14 +15,14 @@ const initialState = {
 };
 
 const contactsFilterAZ = (a, b, i) => {
-  const name1 = a[i];
-  const name2 = b[i];
+  const nameA = a[i];
+  const nameB = b[i];
 
-  if (name1 < name2) {
+  if (nameA < nameB) {
     return 1;
   }
 
-  if (name1 > name2) {
+  if (nameA > nameB) {
     return -1;
   } else {
     return 0;
@@ -28,14 +30,14 @@ const contactsFilterAZ = (a, b, i) => {
 };
 
 const contactsFilterZA = (a, b, i) => {
-  const name1 = a[i];
-  const name2 = b[i];
+  const nameA = a[i];
+  const nameB = b[i];
 
-  if (name1 < name2) {
+  if (nameA < nameB) {
     return -1;
   }
 
-  if (name1 > name2) {
+  if (nameA > nameB) {
     return 1;
   } else {
     return 0;
@@ -49,6 +51,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         loading: true,
       };
+
     case GET_SUCCESS_USERS_DATA:
       return {
         ...state,
@@ -56,6 +59,7 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: "",
       };
+
     case GET_FAIL_USERS_DATA:
       return {
         ...state,
@@ -63,6 +67,29 @@ const reducer = (state = initialState, action) => {
         loading: false,
         error: action.payload,
       };
+
+    case UPDATE_CONTACT:
+      const newData = state.data.map((item) =>
+        item.id === action.payload.id ? action.payload : item
+      );
+      localStorage.removeItem("localStorageData");
+      localStorage.setItem("localStorageData", JSON.stringify(newData));
+      return {
+        ...state,
+        data: newData,
+      };
+
+    case SEARCH_CONTACT:
+      return {
+        ...state,
+        data: state.data.filter((item) => {
+          const firstNameAndLastName = `${item.firstName} ${item.lastName}`;
+          return firstNameAndLastName
+            .toLowerCase()
+            .includes(action.payload.toLowerCase());
+        }),
+      };
+
     case SORT_A_Z:
       return {
         ...state,
@@ -70,6 +97,7 @@ const reducer = (state = initialState, action) => {
           return contactsFilterAZ(a, b, "firstName");
         }),
       };
+
     case SORT_Z_A:
       return {
         ...state,

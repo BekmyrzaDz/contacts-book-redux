@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import ContactImg from "../../images/contact-img.jpg";
 import favorite from "../../images/favorite-transparent.svg";
 import location from "../../images/location.svg";
 import email from "../../images/email.svg";
 import internet from "../../images/internet.svg";
 import smartphone from "../../images/smartphone.svg";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -59,7 +60,7 @@ const ContactListContent = (props) => {
             >
               {props.firstName} {props.lastName}
             </Typography>
-            <IconButton>
+            <IconButton onClick={() => props.addFavorite(props)}>
               <img src={favorite} alt="favorite"></img>
             </IconButton>
           </Box>
@@ -127,18 +128,20 @@ const ContactListContent = (props) => {
         </CardContent>
       </CardActionArea>
       <CardActions sx={{ display: "flex", justifyContent: "end" }}>
-        <StyledButton
-          size="small"
-          color="primary"
-          sx={{
-            fontSize: 14,
-            textTransform: "lowercase",
-            fontFamily: "Ubuntu",
-            fontWeight: 400,
-          }}
-        >
-          show
-        </StyledButton>
+        <Link to={`/item:${props.id}`} style={{ textDecoration: "none" }}>
+          <StyledButton
+            size="small"
+            color="primary"
+            sx={{
+              fontSize: 14,
+              textTransform: "lowercase",
+              fontFamily: "Ubuntu",
+              fontWeight: 400,
+            }}
+          >
+            show
+          </StyledButton>
+        </Link>
       </CardActions>
     </Card>
   );

@@ -2,6 +2,8 @@ import {
   REQUEST_DATA_USERS,
   GET_SUCCESS_USERS_DATA,
   GET_FAIL_USERS_DATA,
+  UPDATE_CONTACT,
+  SEARCH_CONTACT,
   SORT_A_Z,
   SORT_Z_A,
 } from "./types";
@@ -29,13 +31,27 @@ export const getFail = (error) => {
   };
 };
 
-export const sortAZ = () => {
+export const updateContact = (payload) => {
+  return {
+    type: UPDATE_CONTACT,
+    payload,
+  };
+};
+
+export const searchContact = (payload) => {
+  return {
+    type: SEARCH_CONTACT,
+    payload,
+  };
+};
+
+export const sortAz = () => {
   return {
     type: SORT_A_Z,
   };
 };
 
-export const sortZA = () => {
+export const sortZa = () => {
   return {
     type: SORT_Z_A,
   };

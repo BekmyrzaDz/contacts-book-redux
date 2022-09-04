@@ -3,20 +3,23 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import reducer from "./ContactReducer";
 
-const setLocalStorageDate = (store) => {
+const setLocalStorageData = (store) => {
   try {
     const data = JSON.stringify(store);
-    localStorage.setItem("LocalStorageDate", data);
+    localStorage.setItem("LocalStorageData", data);
   } catch (error) {
     console.log("Error", error);
   }
 };
 
-const getLocalStorageDate = () => {
+const getLocalStorageData = () => {
   try {
-    const data = localStorage.getItem("LocalStorageDate");
+    const data = localStorage.getItem("LocalStorageData");
 
-    if (data === null) return undefined;
+    if (data === null) {
+      console.log("В localStorage ничего нет!");
+      return undefined;
+    }
 
     return JSON.parse(data);
   } catch (error) {
@@ -26,9 +29,9 @@ const getLocalStorageDate = () => {
 
 const store = createStore(
   reducer,
-  getLocalStorageDate(),
+  getLocalStorageData(),
   composeWithDevTools(applyMiddleware(thunk))
 );
-store.subscribe(() => setLocalStorageDate(store.getState()));
+store.subscribe(() => setLocalStorageData(store.getState()));
 
 export default store;
