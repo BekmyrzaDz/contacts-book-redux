@@ -49,7 +49,6 @@ const ContactList = () => {
   console.log("state", state);
 
   const [favorite, setFavorite] = useState(true);
-  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
     const getData = localStorage.getItem("LocalStorageData");
@@ -57,16 +56,6 @@ const ContactList = () => {
       dispatch(GetUsersAll());
     }
   }, []);
-
-  const addFavorite = (item) => {
-    setToggle(!toggle);
-    let arr = [];
-
-    if (!toggle) {
-      arr.push(item);
-      localStorage.setItem("Favorite", JSON.stringify(arr));
-    }
-  };
 
   const showFavorites = () => {
     setFavorite(!favorite);
@@ -119,7 +108,6 @@ const ContactList = () => {
                 website={contact.website}
                 email={contact.email}
                 image={contact.image}
-                addFavorite={addFavorite}
               />
             </Grid>
           ))}

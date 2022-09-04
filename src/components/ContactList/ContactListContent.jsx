@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./ContactListContent.css";
 import ContactImg from "../../images/contact-img.jpg";
 import favorite from "../../images/favorite-transparent.svg";
 import location from "../../images/location.svg";
@@ -18,6 +19,7 @@ import {
   CardContent,
   Card,
 } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 import { styled } from "@mui/material/styles";
 
@@ -30,6 +32,24 @@ const StyledButton = styled(Button)(() => ({
 }));
 
 const ContactListContent = (props) => {
+  const [toggle, setToggle] = useState(false);
+
+  const addFavorite = (item) => {
+    setToggle(!toggle);
+    console.log(toggle);
+
+    let arr = [];
+    if (!toggle) {
+      arr.push(item);
+      localStorage.setItem("Favorite", JSON.stringify(arr));
+    }
+
+    if (toggle) {
+      arr.shift(item);
+      localStorage.setItem("Favorite", JSON.stringify(arr));
+    }
+  };
+
   return (
     <Card sx={{ width: 250 }}>
       <CardActionArea>
@@ -60,8 +80,12 @@ const ContactListContent = (props) => {
             >
               {props.firstName} {props.lastName}
             </Typography>
-            <IconButton onClick={() => props.addFavorite(props)}>
-              <img src={favorite} alt="favorite"></img>
+            <IconButton onClick={() => addFavorite(props)}>
+              <FavoriteIcon
+                // src={favorite}
+                alt="favorite"
+                className={toggle ? "red__favorite" : "white__favorite"}
+              ></FavoriteIcon>
             </IconButton>
           </Box>
           <Typography
