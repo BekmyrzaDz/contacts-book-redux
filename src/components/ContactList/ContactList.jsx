@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ContactListTop from "./ContactListTop";
 import {
   Box,
@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import ContactListContent from "./ContactListContent";
 
-import { useEffect } from "react";
 import { GetUsersAll } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -68,13 +67,13 @@ const ContactList = () => {
     }
   };
 
-  const filteringAzOnClick = (data) => {
-    return data.sort((a, b) => {
+  const filteringAzOnClick = () => {
+    return dataList.sort((a, b) => {
       return contactsFilterAZ(a, b, "firstName");
     });
   };
-  const filteringZaOnClick = (data) => {
-    return data.sort((a, b) => {
+  const filteringZaOnClick = () => {
+    return dataList.sort((a, b) => {
       return contactsFilterZA(a, b, "firstName");
     });
   };
@@ -91,29 +90,31 @@ const ContactList = () => {
       <Typography component="h1">{state.error}</Typography>
     </Box>
   ) : (
-    <main className="main">
-      <Container>
-        <ContactListTop showFavorites={() => showFavorites()} />
-        <Grid container spacing={{ xs: 2, sm: 4, md: 6 }}>
-          {dataList.map((contact) => (
-            <Grid item key={contact.id}>
-              <ContactListContent
-                key={contact.id}
-                id={contact.id}
-                firstName={contact.firstName}
-                lastName={contact.lastName}
-                city={contact.city}
-                country={contact.country}
-                phoneNumber={contact.phoneNumber}
-                website={contact.website}
-                email={contact.email}
-                image={contact.image}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </main>
+    // <main className="main">
+    // <Container>
+    <>
+      <ContactListTop showFavorites={() => showFavorites()} />
+      <Grid container spacing={{ xs: 2, sm: 4, md: 6 }}>
+        {dataList.map((contact) => (
+          <Grid item key={contact.id}>
+            <ContactListContent
+              key={contact.id}
+              id={contact.id}
+              firstName={contact.firstName}
+              lastName={contact.lastName}
+              city={contact.city}
+              country={contact.country}
+              phoneNumber={contact.phoneNumber}
+              website={contact.website}
+              email={contact.email}
+              image={contact.image}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </>
+    // </Container>
+    // </main>
   );
 };
 

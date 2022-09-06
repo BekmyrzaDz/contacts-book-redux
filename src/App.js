@@ -1,18 +1,20 @@
 import "./App.css";
-import Header from "./components/Header";
+// import Header from "./components/Header";
 import ContactList from "./components/ContactList/ContactList";
 import ContactItem from "./components/ContactItem/ContactItem";
 import { Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
 
 function App() {
   return (
-    <div className="App">
-      <Header />
+    <>
       <Routes>
-        <Route path="/" element={<ContactList />} />
-        <Route path="/item:id" element={<ContactItem />} />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<ContactList />} />
+          <Route path="/item:id" element={<ContactItem />} />
+        </Route>
       </Routes>
-    </div>
+    </>
   );
 }
 
