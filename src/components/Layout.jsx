@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <>
       <Header />
-      <main>
+      <main style={{ marginBottom: 60 }}>
         <Container>
           <Outlet />
         </Container>
