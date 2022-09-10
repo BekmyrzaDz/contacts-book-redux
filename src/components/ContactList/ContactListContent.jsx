@@ -6,7 +6,7 @@ import location from "../../images/location.svg";
 import email from "../../images/email.svg";
 import internet from "../../images/internet.svg";
 import smartphone from "../../images/smartphone.svg";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import {
   Box,
@@ -20,7 +20,6 @@ import {
   Card,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-
 import { styled } from "@mui/material/styles";
 
 const StyledButton = styled(Button)(() => ({
@@ -34,20 +33,19 @@ const StyledButton = styled(Button)(() => ({
 const ContactListContent = (props) => {
   const [toggle, setToggle] = useState(false);
 
-  const addFavorite = (item) => {
+  const toggleFunc = () => {
     setToggle(!toggle);
-    console.log(toggle);
+    return !toggle ? props.addFavorite(props) : props.removeFavorite(props);
+  };
 
-    let arr = [];
-    if (!toggle) {
-      arr.push(item);
-      localStorage.setItem("Favorite", JSON.stringify(arr));
-    }
+  const addToggleFunc = () => {
+    setToggle(!toggle);
+    return props.addFavorite(props);
+  };
 
-    if (toggle) {
-      arr.shift(item);
-      localStorage.setItem("Favorite", JSON.stringify(arr));
-    }
+  const remoteToggleFunc = () => {
+    setToggle(toggle);
+    return props.removeFavorite(props);
   };
 
   return (
@@ -80,10 +78,10 @@ const ContactListContent = (props) => {
             >
               {props.firstName} {props.lastName}
             </Typography>
-            <IconButton onClick={() => addFavorite(props)}>
+            <IconButton onClick={toggleFunc}>
               <FavoriteIcon
-                // src={favorite}
                 alt="favorite"
+                // className={toggleProps}
                 className={toggle ? "red__favorite" : "white__favorite"}
               ></FavoriteIcon>
             </IconButton>

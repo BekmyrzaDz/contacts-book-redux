@@ -55,7 +55,6 @@ const ContactListTop = (props) => {
       />
       <Box>
         <IconButton onClick={() => props.showFavorites()}>
-          {/* <FavoriteIcon color="#D32F2F" /> */}
           <img src={favorite} alt="heart"></img>
         </IconButton>
         <IconButton onClick={filteringAzOnClick}>

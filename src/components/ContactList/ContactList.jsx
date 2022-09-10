@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ContactListTop from "./ContactListTop";
-import {
-  Box,
-  CircularProgress,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import ContactListContent from "./ContactListContent";
 
 import { GetUsersAll } from "../../redux/actions";
@@ -49,12 +43,25 @@ const ContactList = () => {
 
   const [favorite, setFavorite] = useState(true);
 
+  const [favoritesId, setFavoriteId] = useState([]);
+  localStorage.setItem("Favorite", JSON.stringify(favoritesId));
+
   useEffect(() => {
     const getData = localStorage.getItem("LocalStorageData");
     if (!getData) {
       dispatch(GetUsersAll());
     }
   }, []);
+
+  const addFavorite = ({ id }) => {
+    const result = [...favoritesId, id];
+    setFavoriteId(result);
+  };
+
+  const removeFavorite = ({ id }) => {
+    const result = [...favoritesId].filter((favoriteId) => favoriteId !== id);
+    setFavoriteId(result);
+  };
 
   const showFavorites = () => {
     setFavorite(!favorite);
@@ -63,7 +70,6 @@ const ContactList = () => {
       if (!favoriteList) {
         alert("There is no Favourite contact");
       }
-      console.log(favoriteList);
     }
   };
 
@@ -79,7 +85,18 @@ const ContactList = () => {
   };
 
   const favoriteList = JSON.parse(localStorage.getItem("Favorite"));
-  let dataList = favorite ? state : favoriteList;
+
+  function renderFavorite(list = [], data) {
+    if (list) {
+      const favoriteData = data.filter((contact, i) => {
+        return contact.id === list[i];
+      });
+
+      return favoriteData;
+    }
+  }
+
+  let dataList = favorite ? state : renderFavorite(favoriteList, state);
 
   return state.loading ? (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -90,8 +107,6 @@ const ContactList = () => {
       <Typography component="h1">{state.error}</Typography>
     </Box>
   ) : (
-    // <main className="main">
-    // <Container>
     <>
       <ContactListTop showFavorites={() => showFavorites()} />
       <Grid container spacing={{ xs: 2, sm: 4, md: 6 }}>
@@ -108,13 +123,14 @@ const ContactList = () => {
               website={contact.website}
               email={contact.email}
               image={contact.image}
+              addFavorite={addFavorite}
+              removeFavorite={removeFavorite}
+              // toggle={toggle}
             />
           </Grid>
         ))}
       </Grid>
     </>
-    // </Container>
-    // </main>
   );
 };
 
